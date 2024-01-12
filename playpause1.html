@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Text-to-Speech Play/Pause</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-Q5yNK6Aq0fJAx7g/vI7raJR3RM6GXGikRxSlpXV0wrONpG6E4/8erJZiIT2OoVfGdJWvg1cr0Xz3F1dDTR/4Aw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- Styles -->
+    <style>
+        .button-3 {
+            appearance: none;
+            background-color: #2ea44f;
+            border: 1px solid rgba(27, 31, 35, 0.15);
+            border-radius: 6px;
+            box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
+            box-sizing: border-box;
+            color: #fff;
+            cursor: pointer;
+            display: inline-block;
+            font-family: 'Arial', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 20px;
+            padding: 6px 16px;
+            position: relative;
+            text-align: center;
+            text-decoration: none;
+            user-select: none;
+            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+
+        .icon {
+            display: inline-block;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .playing .icon {
+            animation: rotate 1s linear infinite;
+        }
+
+        @keyframes rotate {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Button with Play/Pause Animation -->
+    <button onclick="togglePlayPause()" class="button-3">
+        <span id="playPauseIcon" class="icon"><i class="fas fa-play"></i></span>DD
+    </button>
+
+    <!-- Font Awesome Script -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js" integrity="sha512-nw7g3+P44y3jBQpFk2nIUee8hGZs5u8uTAM6PA06Jt/Bgn4zvA3kfOb1H43SWqpPrCG0V7W9z2JCiTI0bOHNUw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <!-- JavaScript for Text-to-Speech Play/Pause -->
+    <script>
+        var isPlaying = false;
+        var playPauseIcon = document.getElementById('playPauseIcon');
+        var utterance = new SpeechSynthesisUtterance();
+        var textToRead = "My name is Ragnar Lathbork. Hail King Ragnar.";
+        var isPaused = false;
+
+        utterance.text = textToRead;
+
+        function togglePlayPause() {
+            if (isPlaying) {
+                // Pause speech and toggle state
+                window.speechSynthesis.pause();
+                isPaused = true;
+                playPauseIcon.innerHTML = '<i class="fas fa-play"></i>';
+            } else {
+                // Continue from where it was paused or start from the beginning
+                if (isPaused) {
+                    window.speechSynthesis.resume();
+                } else {
+                    window.speechSynthesis.speak(utterance);
+                }
+                isPaused = false;
+                playPauseIcon.innerHTML = '<i class="fas fa-pause"></i>';
+            }
+            isPlaying = !isPlaying;
+            playPauseIcon.classList.toggle('playing');
+        }
+
+        // Event listener to handle speech end and update state
+        utterance.onend = function () {
+            isPlaying = false;
+            isPaused = false;
+            playPauseIcon.innerHTML = '<i class="fas fa-play"></i>';
+            playPauseIcon.classList.remove('playing');
+        };
+    </script>
+</body>
+</html>
